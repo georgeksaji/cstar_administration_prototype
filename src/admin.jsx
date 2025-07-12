@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { 
     Home, Calendar, CreditCard, Megaphone, MessageSquare, LogOut, Menu, X, 

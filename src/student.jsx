@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Home, Calendar, CreditCard, Megaphone, MessageSquare, LogOut, Menu, X, ChevronRight, CheckCircle, AlertTriangle, Clock, ArrowLeft, Users, Award, ExternalLink } from 'lucide-react';
 // Assuming you have cstar.png in src/assets/
 import cstarLogo from './assets/cstar.png'; 
