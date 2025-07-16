@@ -1,214 +1,73 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { 
-    Home, Calendar, CreditCard, Megaphone, MessageSquare, LogOut, Menu, X, 
-    ChevronRight, CheckCircle, Clock, ArrowLeft, Users, Award, ExternalLink,
-    LayoutDashboard, CheckSquare as CheckSquareAdmin, ThumbsUp, ThumbsDown, UserSwitch
+    CreditCard, Megaphone, MessageSquare, LogOut, Menu, X, 
+    ChevronRight, Users, LayoutDashboard, CheckSquare as CheckSquareAdmin, 
+    ThumbsUp, ThumbsDown, PlusCircle, Upload, Trash2, Edit, UserPlus, Calendar,
+    BookCopy, Shield
 } from 'lucide-react';
-// Assuming you have cstar.png in src/assets/
+
+// --- FIXED ASSET ---
+// Using a placeholder URL for the logo.
 import cstarLogo from './assets/cstar.png'; 
 
-// --- STUDENT MOCK DATA ---
-const studentData = {
-    name: "George K Saji",
-    studentId: "MCA2426",
-    attendance: 88,
-    group: 5,
-};
-const studentEventData = {
-  '1': { id: 1, date: 'July 11, 2025', title: 'Tech Symposium "Innovate 2025"', photo: 'https://placehold.co/600x400/e2e8f0/475569?text=Innovate+2025', details: { fullDescription: "Innovate 2025 was a landmark event for our college...", organizers: ["Dr. Ramesh Kumar", "Student Tech Club"], attendanceSummary: "Overall attendance for the event was 92%." }},
-  '2': { id: 2, date: 'July 07, 2025', title: 'GitHub & Git Workshop', photo: 'https://placehold.co/600x400/e2e8f0/475569?text=Git+Workshop', details: { fullDescription: "A hands-on session was conducted for all students...", organizers: ["CSTAR"], attendanceSummary: "Attendance was mandatory for all CS students." }},
-};
-const attendanceLogData = [
-    { date: 'July 11, 2025', status: 'Present', eventId: 1, eventName: 'Tech Symposium "Innovate 2025"' },
-    { date: 'July 10, 2025', status: 'Present', eventId: null, eventName: null },
-    { date: 'July 09, 2025', status: 'Absent', eventId: null, eventName: null },
-];
-const groupMatesData = [
-    { name: 'George K Saji', class: 'MCA', contact: '9876543210', gender: 'Male' },
-    { name: 'Tejaa Tharshini', class: 'MCA', contact: '9876543211', gender: 'Female' },
-];
-const myContributionsData = [
-    { id: 1, text: 'Organized the technical quiz for the "Innovate 2025" symposium.', status: 'Endorsed' },
-    { id: 3, text: 'Volunteered during the Freshers Welcome Event.', status: 'Pending' },
-];
-const studentAnnouncementsData = [
-    { id: 1, date: 'July 10, 2025', title: 'No CSTAR on July 14', content: 'Please note that there will be no CSTAR session on July 14th due to scheduling conflicts.' },
-];
-const upcomingFestsData = [
-    { id: 'fest1', college: "IIT Madras", fest: "Shaastra 2025", link: "https://shaastra.org/" },
-    { id: 'fest2', college: "VIT Vellore", fest: "Riviera 2025", link: "https://vit.ac.in/riviera" },
-];
-const studentQueriesData = [
-    { id: 1, query: "When is the deadline for the next fee payment?", reply: "The deadline for the next semester's tuition fee is August 15, 2025. You can find more details under the Payments section." }
-];
-
 // --- ADMIN MOCK DATA ---
-const adminData = { name: "Dr. Bindiya" };
-const dashboardStats = { totalStudents: 150, pendingEndorsements: 3, openQueries: 2 };
-const pendingContributionsData = [
-    { id: 3, studentName: 'George K Saji', text: 'Volunteered during the Freshers Welcome Event.' },
-    { id: 4, studentName: 'Tejaa Tharshini', text: 'Designed the CSTAR logo.' },
+const adminData = { name: "Diljith" };
+const dashboardStats = { totalStudents: 150, pendingEndorsements: 2, openQueries: 1 };
+
+const initialCoursesData = [
+    { id: 1, name: 'Master of Computer Applications', duration: 2 },
+    { id: 2, name: 'Bachelor of Computer Applications', duration: 3 },
 ];
-const allStudentsData = [
-    { name: 'George K Saji', course: 'MCA', group: 5 },
-    { name: 'Tejaa Tharshini', course: 'MCA', group: 5 },
+
+const initialBatchesData = [
+    { 
+        id: 1, courseId: 1, academicYear: '2024-2026', status: 'Active', 
+        students: [
+            { id: 101, name: 'George K Saji', rollNo: 'MCA24001', gender: 'Male', group: 1, phone: '9876543210', email: 'george.saji@example.com' },
+            { id: 102, name: 'Tejaa Tharshini', rollNo: 'MCA24002', gender: 'Female', group: 1, phone: '9876543211', email: 'tejaa.t@example.com' },
+            { id: 103, name: 'Sivalakshmi P S', rollNo: 'MCA24003', gender: 'Female', group: 2, phone: '9876543212', email: 'sivalakshmi.ps@example.com' },
+        ]
+    },
+    { 
+        id: 2, courseId: 2, academicYear: '2023-2026', status: 'Active',
+        students: [
+            { id: 201, name: 'Dony Mullanil Binu', rollNo: 'BCA23001', gender: 'Male', group: null, phone: '9876543213', email: 'dony.binu@example.com' },
+            { id: 202, name: 'Geo Devassy', rollNo: 'BCA23002', gender: 'Male', group: null, phone: '9876543214', email: 'geo.devassy@example.com' },
+        ]
+    },
+    { id: 3, courseId: 1, academicYear: '2022-2024', status: 'Inactive', students: [] },
 ];
-const adminQueriesData = [
-    { id: 1, studentName: 'Aadarsh V Venu', query: "When is the deadline for the next fee payment?", reply: "The deadline for the next semester's tuition fee is August 15, 2025.", status: 'Answered' },
-    { id: 2, studentName: 'Arjun C', query: "Is there a holiday for the upcoming festival?", reply: null, status: 'Open' },
-];
-const allStudentsConsolidatedPaymentsData = [
-    { name: 'Dony Mullanil Binu', course: 'BCA', dec2025: 'Paid', jan2025: 'Paid', farewell: 'Paid' },
-    { name: 'Geo Devassy', course: 'BCA', dec2025: 'Paid', jan2025: 'Paid', farewell: 'Paid' },
+
+const initialOfficeBearers = [
+    { id: 1, name: 'Dr. Bindiya', position: 'CSTAR Coordinator', username: 'bindiya.m' },
+    { id: 2, name: 'Prof. John Doe', position: 'Asst. Coordinator', username: 'john.doe' },
 ];
 
 // ####################################################################
-// #  STUDENT DASHBOARD COMPONENT                                     #
+// #  MAIN APP COMPONENT                                              #
 // ####################################################################
-const StudentDashboard = () => {
-    const [activeScreen, setActiveScreen] = useState('Home');
-    const [selectedEvent, setSelectedEvent] = useState(null);
-    const [isSidebarOpen, setSidebarOpen] = useState(false);
-
-    const renderScreen = () => {
-        switch (activeScreen) {
-            case 'Home': return <DashboardPage onEventClick={setSelectedEvent} setActiveScreen={setActiveScreen} />;
-            case 'Attendance': return <AttendancePage />;
-            case 'Payments': return <PaymentsPage setActiveScreen={setActiveScreen} />;
-            case 'ConsolidatedPayments': return <ConsolidatedPaymentsPage setActiveScreen={setActiveScreen} />;
-            case 'Announcements': return <AnnouncementsPage />;
-            case 'Queries': return <QueriesPage />;
-            case 'My Group': return <MyGroupPage />;
-            case 'My Contributions': return <MyContributionsPage />;
-            default: return <DashboardPage onEventClick={setSelectedEvent} setActiveScreen={setActiveScreen} />;
-        }
-    }
-
-    return (
-        <div className="flex h-screen bg-slate-50 font-sans text-sm">
-            <StudentSidebar activeScreen={activeScreen} setActiveScreen={setActiveScreen} isSidebarOpen={isSidebarOpen} setSidebarOpen={setSidebarOpen} />
-            <div className="flex-1 flex flex-col overflow-hidden">
-                <StudentHeader studentName={studentData.name} onMenuClick={() => setSidebarOpen(true)} />
-                <main className="flex-1 overflow-y-auto p-4 sm:p-6">{renderScreen()}</main>
-            </div>
-            {selectedEvent && <EventDetailModal event={selectedEvent} onClose={() => setSelectedEvent(null)} />}
-        </div>
-    );
-};
-
-// --- STUDENT LAYOUT & PAGES ---
-const StudentSidebar = ({ activeScreen, setActiveScreen, isSidebarOpen, setSidebarOpen }) => {
-    const navItems = [
-        { name: 'Home', icon: Home }, { name: 'Attendance', icon: Calendar }, { name: 'Payments', icon: CreditCard },
-        { name: 'Announcements', icon: Megaphone }, { name: 'My Group', icon: Users }, { name: 'My Contributions', icon: Award },
-        { name: 'Queries', icon: MessageSquare },
-    ];
-    const handleItemClick = (screen) => { setActiveScreen(screen); setSidebarOpen(false); };
-    return (
-        <>
-            {isSidebarOpen && <div className="fixed inset-0 bg-black/60 z-30 sm:hidden" onClick={() => setSidebarOpen(false)}></div>}
-            <aside className={`fixed sm:relative inset-y-0 left-0 w-56 bg-white border-r border-slate-200 flex-col flex-shrink-0 z-40 sm:flex transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full sm:translate-x-0'}`}>
-                <div className="h-16 flex items-center justify-between px-6 border-b border-slate-200">
-                    <img src={cstarLogo} alt="CSTAR" className='h-12' />
-                    <button onClick={() => setSidebarOpen(false)} className="sm:hidden p-1 text-slate-500"><X size={20} /></button>
-                </div>
-                <nav className="flex-1 px-4 py-4">
-                    <p className="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Student</p>
-                    <ul>{navItems.map(item => (<li key={item.name}><a href="#" onClick={(e) => { e.preventDefault(); handleItemClick(item.name); }} className={`flex items-center px-4 py-2 rounded-md transition-colors duration-200 ${activeScreen === item.name ? 'bg-slate-100 text-slate-900 font-semibold' : 'text-slate-600 hover:bg-slate-100'}`}><item.icon className="w-4 h-4 mr-3" /><span>{item.name}</span></a></li>))}</ul>
-                </nav>
-                <div className="px-4 py-4 border-t border-slate-200">
-                    <a href="#" className="flex items-center px-4 py-2 rounded-md transition-colors duration-200 font-medium text-red-600 hover:bg-red-50"><LogOut className="w-4 h-4 mr-3" /><span>Logout</span></a>
-                </div>
-            </aside>
-        </>
-    );
-};
-const StudentHeader = ({ studentName, onMenuClick }) => (
-    <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 flex-shrink-0">
-        <div className="flex items-center space-x-4">
-            <button onClick={onMenuClick} className="p-2 rounded-full text-slate-500 hover:bg-slate-100 sm:hidden"><Menu size={20} /></button>
-            <h2 className="text-lg font-semibold text-slate-800">Welcome, {studentName.split(' ')[0]}!</h2>
-        </div>
-        <div className="w-8 h-8 rounded-md bg-slate-200 flex items-center justify-center text-slate-600 font-bold">{studentName.charAt(0)}</div>
-    </header>
-);
-const DashboardPage = ({ setActiveScreen }) => (
-  <PageWrapper title="Your Dashboard">
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-      <InfoCard label="Attendance" value={`${studentData.attendance}%`} onClick={() => setActiveScreen('Attendance')} action="View Details" />
-      <InfoCard label="Student ID" value={studentData.studentId} />
-      <InfoCard label="My Group" value={`Group ${studentData.group}`} onClick={() => setActiveScreen('My Group')} action="View Details" />
-    </div>
-    <Section title="Upcoming Fests"><div className="space-y-4">{upcomingFestsData.map((fest) => ( <FestCard key={fest.id} fest={fest} /> ))}</div></Section>
-  </PageWrapper>
-);
-const AttendancePage = () => {
-    const [viewingEventId, setViewingEventId] = useState(null);
-    if (viewingEventId) return <EventReportDetail event={studentEventData[viewingEventId]} onBack={() => setViewingEventId(null)} />;
-    const totalDays = attendanceLogData.length, presentDays = attendanceLogData.filter(d => d.status === 'Present').length, absentDays = totalDays - presentDays, overallPercentage = Math.round((presentDays / totalDays) * 100);
-    const statusStyles = { Present: 'bg-green-100 text-green-800', Absent: 'bg-red-100 text-red-800' };
-    return (
-        <PageWrapper title="Attendance Details">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"><InfoBlock label="Overall" value={`${overallPercentage}%`} /><InfoBlock label="Total Days" value={totalDays} /><InfoBlock label="Present" value={presentDays} /><InfoBlock label="Absent" value={absentDays} /></div>
-            <Section title="Daily Log">
-                <div className="border border-slate-200 rounded-md"><table className="w-full"><thead className="bg-slate-50"><tr><th className="text-left font-semibold p-3">Date</th><th className="text-left font-semibold p-3">Event/Activity</th><th className="text-left font-semibold p-3">Status</th></tr></thead><tbody>{attendanceLogData.map((day, index) => (<tr key={index} className={`border-t border-slate-200 ${day.eventId ? 'cursor-pointer hover:bg-slate-50' : ''}`} onClick={() => day.eventId && setViewingEventId(day.eventId)}><td className="p-3 text-slate-700">{day.date}</td><td className="p-3 text-slate-700 font-medium">{day.eventName || 'Regular Class'}</td><td className="p-3"><span className={`px-2 py-1 text-xs font-semibold rounded-full ${statusStyles[day.status]}`}>{day.status}</span></td></tr>))}</tbody></table></div>
-                <div className="mt-4 text-right"><a href="https://odtracker.rajagiri.edu/site/login" target="_blank" rel="noopener noreferrer" className="inline-block px-4 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-semibold rounded-md transition-colors duration-200 text-center">Apply for OD</a></div>
-            </Section>
-        </PageWrapper>
-    );
-};
-const PaymentsPage = ({ setActiveScreen }) => (<PageWrapper title="Payments"><Section title="Consolidated Payments"><p className="text-slate-600 mb-4">View the consolidated payment report for various events and months.</p><div className="text-left"><button onClick={() => setActiveScreen('ConsolidatedPayments')} className="px-4 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-semibold rounded-md transition-colors duration-200">View Report</button></div></Section></PageWrapper>);
-const ConsolidatedPaymentsPage = ({ setActiveScreen }) => {
-    const statusStyles = { Paid: 'bg-green-100 text-green-800', 'Not Paid': 'bg-red-100 text-red-800' };
-    return (<PageWrapper title="Consolidated Payment Report"><button onClick={() => setActiveScreen('Payments')} className="flex items-center text-sm font-semibold text-slate-600 hover:text-slate-900 mb-4"><ArrowLeft className="w-4 h-4 mr-2" />Back to Payments</button><div className="overflow-x-auto border border-slate-200 rounded-md"><table className="w-full min-w-[600px]"><thead className="bg-slate-50"><tr><th className="text-left font-semibold p-3">Name</th><th className="text-left font-semibold p-3">Course</th><th className="text-left font-semibold p-3">December 2025</th><th className="text-left font-semibold p-3">January 2025</th><th className="text-left font-semibold p-3">Farewell (₹100)</th></tr></thead><tbody>{allStudentsConsolidatedPaymentsData.map((student, index) => (<tr key={index} className="border-t border-slate-200"><td className="p-3 font-medium">{student.name}</td><td className="p-3">{student.course}</td><td className="p-3"><span className={`px-2 py-1 text-xs font-semibold rounded-full ${statusStyles[student.dec2025]}`}>{student.dec2025}</span></td><td className="p-3"><span className={`px-2 py-1 text-xs font-semibold rounded-full ${statusStyles[student.jan2025]}`}>{student.jan2025}</span></td><td className="p-3"><span className={`px-2 py-1 text-xs font-semibold rounded-full ${statusStyles[student.farewell]}`}>{student.farewell}</span></td></tr>))}</tbody></table></div></PageWrapper>);
-};
-const MyGroupPage = () => (<PageWrapper title={`My Group (Group ${studentData.group})`}><div className="border border-slate-200 rounded-md"><table className="w-full"><thead className="bg-slate-50"><tr><th className="text-left font-semibold p-3">Name</th><th className="text-left font-semibold p-3">Class</th><th className="text-left font-semibold p-3">Contact</th><th className="text-left font-semibold p-3">Gender</th></tr></thead><tbody>{groupMatesData.map((mate, index) => (<tr key={index} className="border-t border-slate-200"><td className="p-3 font-medium">{mate.name}</td><td className="p-3">{mate.class}</td><td className="p-3">{mate.contact}</td><td className="p-3">{mate.gender}</td></tr>))}</tbody></table></div></PageWrapper>);
-const MyContributionsPage = () => {
-    const statusStyles = { Endorsed: 'bg-green-100 text-green-800', Pending: 'bg-amber-100 text-amber-800' };
-    return(<PageWrapper title="My Contributions"><Section title="Submit a New Contribution"><SuggestionsBox placeholder="Describe your contribution..." buttonText="Submit for Endorsement" /></Section><div className="my-8 border-t border-slate-200"></div><Section title="Contribution History"><div className="space-y-4">{myContributionsData.map(item => (<div key={item.id} className="p-4 bg-slate-50 rounded-md border border-slate-200"><p className="text-slate-700 mb-2">{item.text}</p><span className={`px-2 py-1 text-xs font-semibold rounded-full ${statusStyles[item.status]}`}>{item.status}</span></div>))}</div></Section></PageWrapper>)
-};
-const AnnouncementsPage = () => (<PageWrapper title="Announcements"><div className="space-y-6">{studentAnnouncementsData.map(ann => (<div key={ann.id} className="pb-4 border-b border-slate-200 last:border-b-0"><p className="text-xs text-slate-500 mb-1">{ann.date}</p><h4 className="font-semibold text-slate-800 mb-1">{ann.title}</h4><p className="text-slate-600">{ann.content}</p></div>))}</div></PageWrapper>);
-const QueriesPage = () => (<PageWrapper title="Suggestions & Queries"><Section title="Submit a New Query"><SuggestionsBox placeholder="Have a question? Let us know here..." buttonText="Submit Query" /></Section><div className="my-8 border-t border-slate-200"></div><Section title="Past Queries">{studentQueriesData.map(q => (<div key={q.id}><p className="font-semibold text-slate-700">Q: {q.query}</p><p className="mt-2 p-3 bg-slate-50 border-l-4 border-slate-300 rounded-r-md">A: {q.reply}</p></div>))} </Section></PageWrapper>);
-
-// --- STUDENT REUSABLE UI COMPONENTS ---
-const Section = ({ title, children }) => (<div><h4 className="text-base font-semibold text-slate-800 mb-3">{title}</h4>{children}</div>);
-const InfoCard = ({ label, value, action, onClick }) => (<div className="bg-slate-50 border border-slate-200 rounded-lg p-4 flex flex-col"><div><p className="text-slate-500">{label}</p><p className="text-slate-800 font-semibold text-2xl mt-1">{value}</p></div>{action && <div className="mt-4"><TextButton onClick={onClick}>{action}</TextButton></div>}</div>);
-const InfoBlock = ({ label, value }) => (<div className="bg-slate-100 p-4 rounded-md text-center"><p className="text-slate-500 text-xs uppercase tracking-wider">{label}</p><p className="text-slate-800 font-bold text-xl">{value}</p></div>);
-const FestCard = ({ fest }) => {
-    const [isInterested, setIsInterested] = useState(false);
-    return (<div className="p-4 bg-slate-50 rounded-md border border-slate-200 flex items-center justify-between"><div><p className="font-semibold text-slate-800">{fest.fest}</p><p className="text-slate-500">{fest.college}</p></div><div className="flex items-center space-x-2"><a href={fest.link} target="_blank" rel="noopener noreferrer" className="p-2 text-slate-500 hover:text-sky-600 hover:bg-slate-100 rounded-md"><ExternalLink size={16} /></a>{isInterested ? (<div className="flex items-center space-x-2"><span className="flex items-center text-green-600 font-semibold text-xs"><CheckCircle size={16} className="mr-1" />Interested</span><button onClick={() => setIsInterested(false)} className="p-1 text-slate-400 hover:text-red-600"><X size={16} /></button></div>) : (<button onClick={() => setIsInterested(true)} className="px-3 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-semibold rounded-md transition-colors duration-200 text-xs">Mark Interested</button>)}</div></div>);
-};
-const TextButton = ({ children, onClick, href, isExternal }) => {
-    const props = isExternal ? { href, target: "_blank", rel: "noopener noreferrer" } : { href: href || "#", onClick };
-    return (<a {...props} className="flex items-center text-sky-600 hover:underline font-medium text-xs cursor-pointer">{children} <ChevronRight className="w-4 h-4 ml-0.5" /></a>);
-};
-const SuggestionsBox = ({ placeholder, buttonText }) => (<div><textarea className="w-full bg-slate-50 rounded-md p-3 text-sm text-slate-700 focus:ring-2 focus:ring-sky-500 focus:outline-none resize-none border border-slate-200" placeholder={placeholder} rows={4}></textarea><div className="text-right mt-2"><button className="px-4 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-semibold rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800">{buttonText}</button></div></div>);
-const EventDetailModal = ({ event, onClose }) => { if (!event) return null; return (<div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={onClose}><div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col border border-slate-200" onClick={e => e.stopPropagation()}><div className="px-6 py-4 flex justify-between items-center border-b border-slate-200 flex-shrink-0"><h2 className="text-lg font-bold text-slate-900">{event.title}</h2><button onClick={onClose} className="p-1 rounded-full text-slate-500 hover:bg-slate-100"><X size={20} /></button></div><div className="p-6 overflow-y-auto"><img src={event.photo} alt={event.title} className="w-full h-60 object-cover rounded-md mb-6 bg-slate-200" /><p className="text-sm text-slate-500 mb-4">{event.date}</p><h3 className="font-semibold text-slate-800 mb-2">Event Details</h3><p className="text-slate-600 mb-6 leading-relaxed">{event.details.fullDescription}</p></div></div></div>);};
-const EventReportDetail = ({ event, onBack }) => (<PageWrapper title="Event Report"><button onClick={onBack} className="flex items-center text-sm font-semibold text-slate-600 hover:text-slate-900 mb-4"><ArrowLeft className="w-4 h-4 mr-2" />Back to Attendance Log</button><h2 className="text-xl font-bold text-slate-900 mb-1">{event.title}</h2><p className="text-sm text-slate-500 mb-4">{event.date}</p><div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6"><img src={event.photo} alt={event.title} className="w-full h-48 object-cover rounded-md bg-slate-200" /><img src={event.photo.replace('?text=', '-2?text=')} alt={event.title} className="w-full h-48 object-cover rounded-md bg-slate-200 hidden md:block" /></div><Section title="Report"><p className="text-slate-600 mb-4 leading-relaxed">{event.details.fullDescription}</p></Section><Section title="Attendance Summary"><p className="text-slate-600">{event.details.attendanceSummary}</p></Section></PageWrapper>);
-
-
-// ####################################################################
-// #  ADMIN PANEL COMPONENT                                           #
-// ####################################################################
-const AdminPanel = () => {
+export default function App() {
     const [activeScreen, setActiveScreen] = useState('Dashboard');
     const [isSidebarOpen, setSidebarOpen] = useState(false);
 
     const renderScreen = () => {
         switch (activeScreen) {
             case 'Dashboard': return <AdminDashboardPage setActiveScreen={setActiveScreen} />;
+            case 'Manage Courses': return <ManageCoursesPage />;
+            case 'Manage Batches': return <ManageBatchesPage />;
+            case 'Manage Groups': return <ManageGroupsPage />;
+            case 'Attendance': return <AttendancePage />;
+            case 'Payments': return <AdminPaymentsPage />;
+            case 'Office Bearers': return <OfficeBearersPage />;
             case 'Endorse Contributions': return <EndorseContributionsPage />;
             case 'Announcements': return <AdminAnnouncementsPage />;
-            case 'Payments': return <AdminPaymentsPage />;
-            case 'Students': return <StudentsPage />;
             case 'Queries': return <AdminQueriesPage />;
             default: return <AdminDashboardPage setActiveScreen={setActiveScreen} />;
         }
     }
 
     return (
-        <div className="flex h-screen bg-slate-50 font-sans text-sm">
+        <div className="flex h-screen bg-slate-100 font-sans text-sm">
             <AdminSidebar activeScreen={activeScreen} setActiveScreen={setActiveScreen} isSidebarOpen={isSidebarOpen} setSidebarOpen={setSidebarOpen} />
             <div className="flex-1 flex flex-col overflow-hidden">
                 <AdminHeader adminName={adminData.name} onMenuClick={() => setSidebarOpen(true)} />
@@ -218,63 +77,534 @@ const AdminPanel = () => {
     );
 };
 
-// --- ADMIN LAYOUT & PAGES ---
+
+// ####################################################################
+// #  LAYOUT & REUSABLE COMPONENTS                                    #
+// ####################################################################
+
 const AdminSidebar = ({ activeScreen, setActiveScreen, isSidebarOpen, setSidebarOpen }) => {
     const navItems = [
-        { name: 'Dashboard', icon: LayoutDashboard }, { name: 'Endorse Contributions', icon: CheckSquareAdmin },
-        { name: 'Announcements', icon: Megaphone }, { name: 'Payments', icon: CreditCard },
-        { name: 'Students', icon: Users }, { name: 'Queries', icon: MessageSquare },
+        { name: 'Dashboard', icon: LayoutDashboard }, 
+        { name: 'Manage Courses', icon: BookCopy },
+        { name: 'Manage Batches', icon: Users },
+        { name: 'Manage Groups', icon: UserPlus },
+        { name: 'Attendance', icon: Calendar },
+        { name: 'Payments', icon: CreditCard },
+        { name: 'Office Bearers', icon: Shield },
+        { name: 'Endorse Contributions', icon: CheckSquareAdmin },
+        { name: 'Announcements', icon: Megaphone }, 
+        { name: 'Queries', icon: MessageSquare },
     ];
     const handleItemClick = (screen) => { setActiveScreen(screen); setSidebarOpen(false); };
     return (
         <>
             {isSidebarOpen && <div className="fixed inset-0 bg-black/60 z-30 sm:hidden" onClick={() => setSidebarOpen(false)}></div>}
-            <aside className={`fixed sm:relative inset-y-0 left-0 w-56 bg-white border-r border-slate-200 flex-col flex-shrink-0 z-40 sm:flex transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full sm:translate-x-0'}`}>
-                <div className="h-16 flex items-center justify-between px-6 border-b border-slate-200">
-                    <img src={cstarLogo} alt="CSTAR" className='h-12' />
-                    <button onClick={() => setSidebarOpen(false)} className="sm:hidden p-1 text-slate-500"><X size={20} /></button>
+            <aside className={`fixed sm:relative inset-y-0 left-0 w-64 bg-white border-r border-slate-200 flex-col flex-shrink-0 z-40 sm:flex transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full sm:translate-x-0'}`}>
+                <div className="h-16 flex items-center justify-center border-b border-slate-200 px-6 relative">
+                    <img src={cstarLogo} alt="CSTAR Logo" className='h-12' />
+                    <button onClick={() => setSidebarOpen(false)} className="sm:hidden p-1 text-slate-500 absolute right-4 top-1/2 -translate-y-1/2"><X size={20} /></button>
                 </div>
                 <nav className="flex-1 px-4 py-4">
-                    <p className="px-4 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Admin</p>
+                    <p className="px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Admin Panel</p>
                     <ul>{navItems.map(item => (<li key={item.name}><a href="#" onClick={(e) => { e.preventDefault(); handleItemClick(item.name); }} className={`flex items-center px-4 py-2 rounded-md transition-colors duration-200 ${activeScreen === item.name ? 'bg-slate-100 text-slate-900 font-semibold' : 'text-slate-600 hover:bg-slate-100'}`}><item.icon className="w-4 h-4 mr-3" /><span>{item.name}</span></a></li>))}</ul>
                 </nav>
-                <div className="px-4 py-4 border-t border-slate-200 space-y-2">
-                    <Link to="/student" className="flex items-center px-4 py-2 rounded-md transition-colors duration-200 font-medium text-sky-600 hover:bg-sky-50">
-                        <UserSwitch className="w-4 h-4 mr-3" />
-                        <span>Switch to Student View</span>
-                    </Link>
-                    <a href="#" className="flex items-center px-4 py-2 rounded-md transition-colors duration-200 font-medium text-red-600 hover:bg-red-50"><LogOut className="w-4 h-4 mr-3" /><span>Logout</span></a>
+                <div className="px-4 py-3 border-t border-slate-200">
+                    <a href="#" className="flex items-center px-4 py-2 rounded-md transition-colors duration-200 font-medium text-red-600 hover:bg-red-50">
+                        <LogOut className="w-4 h-4 mr-3" />
+                        <span>Logout</span>
+                    </a>
                 </div>
             </aside>
         </>
     );
 };
-const AdminHeader = ({ adminName, onMenuClick }) => (<header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 flex-shrink-0"><div className="flex items-center space-x-4"><button onClick={onMenuClick} className="p-2 rounded-full text-slate-500 hover:bg-slate-100 sm:hidden"><Menu size={20} /></button><h2 className="text-lg font-semibold text-slate-800">Welcome, {adminName}!</h2></div><div className="w-8 h-8 rounded-md bg-slate-200 flex items-center justify-center text-slate-600 font-bold">{adminName.charAt(0)}</div></header>);
-const AdminDashboardPage = ({ setActiveScreen }) => (<PageWrapper title="Admin Dashboard"><div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"><InfoCard label="Total Students" value={dashboardStats.totalStudents} /><InfoCard label="Pending Endorsements" value={dashboardStats.pendingEndorsements} onClick={() => setActiveScreen('Endorse Contributions')} action="View" /><InfoCard label="Open Queries" value={dashboardStats.openQueries} onClick={() => setActiveScreen('Queries')} action="View" /></div></PageWrapper>);
-const EndorseContributionsPage = () => {
-    const [contributions, setContributions] = useState(pendingContributionsData);
-    const handleEndorse = (id) => { setContributions(contributions.filter(c => c.id !== id)); };
-    return (<PageWrapper title="Endorse Student Contributions"><div className="space-y-4">{contributions.length > 0 ? contributions.map(item => (<div key={item.id} className="p-4 bg-slate-50 rounded-md border border-slate-200"><p className="font-semibold text-slate-600">{item.studentName}</p><p className="text-slate-800 my-2">{item.text}</p><div className="flex items-center space-x-2"><button onClick={() => handleEndorse(item.id)} className="flex items-center px-3 py-1 bg-green-100 text-green-700 hover:bg-green-200 text-xs font-semibold rounded-md"><ThumbsUp size={14} className="mr-1.5" /> Endorse</button><button onClick={() => handleEndorse(item.id)} className="flex items-center px-3 py-1 bg-red-100 text-red-700 hover:bg-red-200 text-xs font-semibold rounded-md"><ThumbsDown size={14} className="mr-1.5" /> Reject</button></div></div>)) : <p className="text-slate-500">No pending contributions.</p>}</div></PageWrapper>);
+
+const AdminHeader = ({ adminName, onMenuClick }) => (
+    <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 flex-shrink-0">
+        <div className="flex items-center space-x-4">
+            <button onClick={onMenuClick} className="p-2 rounded-full text-slate-500 hover:bg-slate-100 sm:hidden"><Menu size={20} /></button>
+            <h2 className="text-lg font-semibold text-slate-800">Welcome, {adminName}!</h2>
+        </div>
+        <div className="w-9 h-9 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-bold">{adminName.charAt(0)}</div>
+    </header>
+);
+
+const TextButton = ({ children, onClick }) => {
+    return (<button onClick={onClick} className="inline-flex items-center text-sky-600 hover:underline font-semibold text-xs cursor-pointer">{children} <ChevronRight className="w-4 h-4 ml-0.5" /></button>);
 };
-const AdminAnnouncementsPage = () => (<PageWrapper title="Post an Announcement"><Section title="Create New Announcement"><div className="space-y-4"><input type="text" placeholder="Announcement Title" className="w-full bg-slate-50 rounded-md p-3 text-sm text-slate-700 focus:ring-2 focus:ring-sky-500 focus:outline-none border border-slate-200" /><textarea className="w-full bg-slate-50 rounded-md p-3 text-sm text-slate-700 focus:ring-2 focus:ring-sky-500 focus:outline-none resize-none border border-slate-200" placeholder="Write the announcement content here..." rows={5}></textarea><div className="text-right"><button className="px-4 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-semibold rounded-md transition-colors duration-200">Post Announcement</button></div></div></Section></PageWrapper>);
+
+const InfoCard = ({ label, value, action, onClick }) => (
+    <div className="bg-white border border-slate-200 rounded-lg p-5 flex flex-col justify-between">
+        <div>
+            <p className="text-slate-500">{label}</p>
+            <p className="text-slate-800 font-bold text-3xl mt-1">{value}</p>
+        </div>
+        {action && <div className="mt-4"><TextButton onClick={onClick}>{action}</TextButton></div>}
+    </div>
+);
+
+const Modal = ({ show, onClose, title, children, size = 'md' }) => {
+    if (!show) return null;
+    const sizeClasses = { sm: 'max-w-sm', md: 'max-w-md', lg: 'max-w-lg', xl: 'max-w-xl' };
+    return (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={onClose}>
+            <div className={`bg-white rounded-lg shadow-xl w-full ${sizeClasses[size]}`} onClick={e => e.stopPropagation()}>
+                <div className="px-6 py-4 flex justify-between items-center border-b border-slate-200">
+                    <h3 className="text-lg font-bold text-slate-900">{title}</h3>
+                    <button onClick={onClose} className="p-1 rounded-full text-slate-500 hover:bg-slate-100"><X size={20} /></button>
+                </div>
+                <div className="p-6">{children}</div>
+            </div>
+        </div>
+    );
+};
+
+
+// ####################################################################
+// #  PAGE COMPONENTS                                                 #
+// ####################################################################
+
+const AdminDashboardPage = ({ setActiveScreen }) => (
+    <div>
+        <h3 className="text-lg font-semibold text-slate-800 mb-4">Your Dashboard</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <InfoCard label="Total Students" value={dashboardStats.totalStudents} />
+            <InfoCard label="Pending Endorsements" value={dashboardStats.pendingEndorsements} onClick={() => setActiveScreen('Endorse Contributions')} action="View Details" />
+            <InfoCard label="Open Queries" value={dashboardStats.openQueries} onClick={() => setActiveScreen('Queries')} action="View Details" />
+        </div>
+    </div>
+);
+
+const ManageCoursesPage = () => {
+    const [courses, setCourses] = useState(initialCoursesData);
+    const [showModal, setShowModal] = useState(false);
+
+    return (
+        <div>
+            <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold text-slate-800">Manage Courses</h3>
+                <button onClick={() => setShowModal(true)} className="flex items-center gap-2 px-3 py-1.5 bg-slate-800 text-white rounded-md hover:bg-slate-900 text-sm font-semibold">
+                    <PlusCircle size={16} /> New Course
+                </button>
+            </div>
+            <div className="bg-white p-6 rounded-lg border border-slate-200">
+                <div className="space-y-3">
+                    {courses.map(course => (
+                        <div key={course.id} className="p-4 bg-slate-50 rounded-md border border-slate-200 flex justify-between items-center">
+                            <div>
+                                <p className="font-bold text-slate-800">{course.name}</p>
+                                <p className="text-slate-500">{course.duration} years</p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <button className="p-2 text-slate-500 hover:text-slate-800"><Edit size={16} /></button>
+                                <button className="p-2 text-red-500 hover:text-red-700"><Trash2 size={16} /></button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+            <Modal show={showModal} onClose={() => setShowModal(false)} title="Create New Course">
+                <div className="space-y-4">
+                    <input type="text" placeholder="Course Name" className="w-full bg-slate-50 rounded-md p-3 text-sm text-slate-700 border border-slate-200 focus:ring-2 focus:ring-sky-500 focus:outline-none" />
+                    <input type="number" placeholder="Duration (in years)" className="w-full bg-slate-50 rounded-md p-3 text-sm text-slate-700 border border-slate-200 focus:ring-2 focus:ring-sky-500 focus:outline-none" />
+                    <div className="text-right">
+                        <button className="px-4 py-1.5 bg-slate-800 text-white rounded-md hover:bg-slate-900 font-semibold">Create Course</button>
+                    </div>
+                </div>
+            </Modal>
+        </div>
+    );
+};
+
+const ManageBatchesPage = () => {
+    const [batches, setBatches] = useState(initialBatchesData);
+    const [showBatchModal, setShowBatchModal] = useState(false);
+    const [showStudentModal, setShowStudentModal] = useState(false);
+    const [managingBatch, setManagingBatch] = useState(null);
+
+    const handleDeactivate = (batchId) => {
+        setBatches(batches.map(b => b.id === batchId ? { ...b, status: 'Inactive' } : b));
+    };
+    
+    const handleReactivate = (batchId) => {
+        setBatches(batches.map(b => b.id === batchId ? { ...b, status: 'Active' } : b));
+    };
+
+    const openManageStudents = (batch) => {
+        setManagingBatch(batch);
+        setShowStudentModal(true);
+    };
+
+    return (
+        <div>
+            <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold text-slate-800">Manage Batches</h3>
+                <button onClick={() => setShowBatchModal(true)} className="flex items-center gap-2 px-3 py-1.5 bg-slate-800 text-white rounded-md hover:bg-slate-900 text-sm font-semibold">
+                    <PlusCircle size={16} /> New Batch
+                </button>
+            </div>
+            
+            <div className="bg-white p-6 rounded-lg border border-slate-200">
+                <h4 className="font-semibold text-slate-700 mb-3">Active Batches</h4>
+                {batches.filter(b => b.status === 'Active').map(batch => (
+                    <div key={batch.id} className="p-4 bg-slate-50 rounded-md border border-slate-200 mb-4">
+                        <div className="flex justify-between items-center">
+                            <div>
+                                <p className="font-bold text-slate-800">{initialCoursesData.find(c=>c.id === batch.courseId)?.name} {batch.academicYear}</p>
+                                <p className="text-slate-500">{batch.students.length} Students</p>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <button onClick={() => openManageStudents(batch)} className="flex items-center gap-1 px-3 py-1 bg-white text-slate-700 border border-slate-300 rounded-md hover:bg-slate-100 text-xs font-semibold">
+                                    <Edit size={14} /> Manage
+                                </button>
+                                <button onClick={() => handleDeactivate(batch.id)} className="flex items-center gap-1 px-3 py-1 bg-red-100 text-red-700 rounded-md hover:bg-red-200 text-xs font-semibold">
+                                    <Trash2 size={14} /> Deactivate
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            <div className="bg-white p-6 rounded-lg border border-slate-200 mt-6">
+                <h4 className="font-semibold text-slate-700 mb-3">Inactive Batches</h4>
+                {batches.filter(b => b.status === 'Inactive').map(batch => (
+                     <div key={batch.id} className="p-4 bg-slate-50 rounded-md border border-slate-200 mb-4 opacity-60">
+                         <div className="flex justify-between items-center">
+                             <div>
+                                 <p className="font-bold text-slate-800">{initialCoursesData.find(c=>c.id === batch.courseId)?.name} {batch.academicYear}</p>
+                             </div>
+                             <button onClick={() => handleReactivate(batch.id)} className="flex items-center gap-1 px-3 py-1 bg-green-100 text-green-700 rounded-md hover:bg-green-200 text-xs font-semibold">
+                                 Reactivate
+                             </button>
+                         </div>
+                     </div>
+                ))}
+            </div>
+
+            <Modal show={showBatchModal} onClose={() => setShowBatchModal(false)} title="Create New Batch">
+                <div className="space-y-4">
+                    <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">Course</label>
+                        <select className="w-full bg-slate-50 rounded-md p-3 text-sm text-slate-700 border border-slate-200 focus:ring-2 focus:ring-sky-500 focus:outline-none">
+                            <option value="" disabled>Select a course</option>
+                            {initialCoursesData.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                        </select>
+                    </div>
+                     <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">Academic Year</label>
+                        <input type="text" placeholder="e.g., 2024-2026" className="w-full bg-slate-50 rounded-md p-3 text-sm text-slate-700 border border-slate-200 focus:ring-2 focus:ring-sky-500 focus:outline-none" />
+                    </div>
+                    <div className="text-right">
+                        <button className="px-4 py-1.5 bg-slate-800 text-white rounded-md hover:bg-slate-900 font-semibold">Create Batch</button>
+                    </div>
+                </div>
+            </Modal>
+            
+            <Modal show={showStudentModal} onClose={() => setShowStudentModal(false)} title={`Manage Students: ${initialCoursesData.find(c=>c.id === managingBatch?.courseId)?.name} ${managingBatch?.academicYear}`} size="lg">
+                <div className="space-y-4">
+                     <div className="flex gap-2">
+                        <button className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-slate-800 text-white rounded-md hover:bg-slate-900 text-sm font-semibold">
+                           <UserPlus size={16} /> Add Student
+                        </button>
+                        <label className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 text-sm font-semibold cursor-pointer">
+                           <Upload size={16} /> Import Excel
+                           <input type="file" className="hidden" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+                        </label>
+                     </div>
+                     <div className="max-h-80 overflow-y-auto pr-2 -mr-2">
+                        {managingBatch?.students.map(student => (
+                            <div key={student.id} className="p-3 bg-slate-50 rounded-md border border-slate-200 mb-2">
+                                <div className="flex justify-between items-center">
+                                    <p className="font-medium text-slate-700">{student.name} <span className="text-slate-500 font-normal">({student.rollNo})</span></p>
+                                    <button className="p-1 text-slate-500 hover:text-slate-800"><Edit size={14} /></button>
+                                </div>
+                                <div className="text-xs text-slate-500 mt-1 grid grid-cols-2 gap-x-4">
+                                    <p>Email: {student.email}</p>
+                                    <p>Phone: {student.phone}</p>
+                                    <p>Gender: {student.gender}</p>
+                                    <p>Group: {student.group || 'N/A'}</p>
+                                </div>
+                            </div>
+                        ))}
+                     </div>
+                </div>
+            </Modal>
+        </div>
+    );
+};
+
+const ManageGroupsPage = () => {
+    const [selectedBatchId, setSelectedBatchId] = useState(initialBatchesData[0].id);
+    const activeBatches = initialBatchesData.filter(b => b.status === 'Active');
+    const selectedBatch = activeBatches.find(b => b.id === selectedBatchId);
+
+    return (
+        <div>
+            <h3 className="text-lg font-semibold text-slate-800 mb-4">Manage Groups</h3>
+            <div className="bg-white p-6 rounded-lg border border-slate-200">
+                <div className="mb-4">
+                    <label htmlFor="batch-select" className="block text-sm font-medium text-slate-700 mb-1">Select Batch</label>
+                    <select id="batch-select" value={selectedBatchId} onChange={(e) => setSelectedBatchId(Number(e.target.value))} className="w-full bg-slate-50 rounded-md p-3 text-sm text-slate-700 border border-slate-200 focus:ring-2 focus:ring-sky-500 focus:outline-none">
+                        {activeBatches.map(b => <option key={b.id} value={b.id}>{initialCoursesData.find(c=>c.id === b.courseId)?.name} {b.academicYear}</option>)}
+                    </select>
+                </div>
+                <div className="space-y-2">
+                    {selectedBatch?.students.map(student => (
+                        <div key={student.id} className="p-3 bg-slate-50 rounded-md border border-slate-200 flex justify-between items-center">
+                            <p className="font-medium text-slate-800">{student.name}</p>
+                            <div className="flex items-center gap-2">
+                                <label htmlFor={`group-for-${student.id}`} className="text-xs font-semibold text-slate-500">GROUP</label>
+                                <select id={`group-for-${student.id}`} defaultValue={student.group || ''} className="w-20 bg-white rounded-md p-1 text-sm text-slate-700 border border-slate-300 focus:ring-2 focus:ring-sky-500 focus:outline-none">
+                                    <option value="" disabled>None</option>
+                                    {[1,2,3,4,5,6,7,8,9,10].map(n => <option key={n} value={n}>{n}</option>)}
+                                </select>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const AttendancePage = () => {
+    const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+    const [selectedBatchIds, setSelectedBatchIds] = useState([]);
+    const activeBatches = initialBatchesData.filter(b => b.status === 'Active');
+    
+    const studentsForAttendance = initialBatchesData
+        .filter(batch => selectedBatchIds.includes(batch.id))
+        .flatMap(batch => batch.students.map(s => ({...s, batchName: `${initialCoursesData.find(c=>c.id === batch.courseId)?.name} ${batch.academicYear}`})));
+
+    const handleBatchSelection = (batchId) => {
+        setSelectedBatchIds(prev => prev.includes(batchId) ? prev.filter(id => id !== batchId) : [...prev, batchId]);
+    };
+
+    return (
+        <div>
+            <h3 className="text-lg font-semibold text-slate-800 mb-4">Take Attendance</h3>
+            <div className="bg-white p-6 rounded-lg border border-slate-200">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">Date</label>
+                        <input type="date" value={selectedDate} onChange={e => setSelectedDate(e.target.value)} className="w-full bg-slate-50 rounded-md p-2 text-sm text-slate-700 border border-slate-200 focus:ring-2 focus:ring-sky-500 focus:outline-none" />
+                    </div>
+                    <div className="md:col-span-2">
+                        <label className="block text-sm font-medium text-slate-700 mb-1">Select Batches</label>
+                        <div className="flex flex-wrap gap-2">
+                            {activeBatches.map(batch => (
+                                <button key={batch.id} onClick={() => handleBatchSelection(batch.id)} className={`px-3 py-1 rounded-full text-sm font-semibold border-2 ${selectedBatchIds.includes(batch.id) ? 'bg-sky-600 text-white border-sky-600' : 'bg-white text-slate-700 border-slate-300'}`}>
+                                    {initialCoursesData.find(c=>c.id === batch.courseId)?.name} {batch.academicYear}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+                
+                {selectedBatchIds.length > 0 && (
+                    <div>
+                        <h4 className="font-semibold text-slate-700 mb-2">Mark Attendance</h4>
+                        <div className="space-y-2">
+                           {studentsForAttendance.map(student => (
+                                <AttendanceRow key={student.id} student={student} />
+                           ))}
+                        </div>
+                         <div className="text-right mt-6">
+                            <button className="px-6 py-2 bg-slate-800 text-white rounded-md hover:bg-slate-900 font-semibold">Submit Attendance</button>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
+const AttendanceRow = ({ student }) => {
+    const [isPresent, setIsPresent] = useState(true);
+    return (
+         <div className="p-2 bg-slate-50 rounded-md border border-slate-200 flex justify-between items-center">
+            <div>
+                <p className="font-medium text-slate-800">{student.name}</p>
+                <p className="text-xs text-slate-500">{student.batchName}</p>
+            </div>
+            <div className="flex items-center gap-2">
+                <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" checked={isPresent} onChange={() => setIsPresent(!isPresent)} className="h-5 w-5 rounded border-gray-300 text-sky-600 focus:ring-sky-500" />
+                    <span className={`text-xs font-bold ${isPresent ? 'text-green-600' : 'text-red-600'}`}>
+                        {isPresent ? 'PRESENT' : 'ABSENT'}
+                    </span>
+                </label>
+            </div>
+        </div>
+    );
+};
+
 const AdminPaymentsPage = () => {
-    const statusStyles = { Paid: 'bg-green-100 text-green-800', 'Not Paid': 'bg-red-100 text-red-800' };
-    return (<PageWrapper title="Consolidated Payment Report"><div className="overflow-x-auto border border-slate-200 rounded-md"><table className="w-full min-w-[600px]"><thead className="bg-slate-50"><tr><th className="text-left font-semibold p-3">Name</th><th className="text-left font-semibold p-3">Course</th><th className="text-left font-semibold p-3">December 2025</th><th className="text-left font-semibold p-3">January 2025</th><th className="text-left font-semibold p-3">Farewell (₹100)</th></tr></thead><tbody>{allStudentsConsolidatedPaymentsData.map((student, index) => (<tr key={index} className="border-t border-slate-200"><td className="p-3 font-medium">{student.name}</td><td className="p-3">{student.course}</td><td className="p-3"><span className={`px-2 py-1 text-xs font-semibold rounded-full ${statusStyles[student.dec2025]}`}>{student.dec2025}</span></td><td className="p-3"><span className={`px-2 py-1 text-xs font-semibold rounded-full ${statusStyles[student.jan2025]}`}>{student.jan2025}</span></td><td className="p-3"><span className={`px-2 py-1 text-xs font-semibold rounded-full ${statusStyles[student.farewell]}`}>{student.farewell}</span></td></tr>))}</tbody></table></div></PageWrapper>);
+    const [collections, setCollections] = useState([
+        { id: 'c1', title: 'T-Shirt Fee', amount: 350 },
+        { id: 'c2', title: 'CSTAR Dec Fee', amount: 500 },
+    ]);
+    const [showModal, setShowModal] = useState(false);
+    const students = initialBatchesData.filter(b => b.status === 'Active').flatMap(b => b.students);
+
+    return (
+        <div>
+            <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold text-slate-800">Manage Payments</h3>
+                <button onClick={() => setShowModal(true)} className="flex items-center gap-2 px-3 py-1.5 bg-slate-800 text-white rounded-md hover:bg-slate-900 text-sm font-semibold">
+                    <PlusCircle size={16} /> New Payment Column
+                </button>
+            </div>
+            <div className="bg-white rounded-lg border border-slate-200 overflow-x-auto">
+                <table className="w-full min-w-[800px]">
+                    <thead className="bg-slate-50">
+                        <tr>
+                            <th className="text-left font-semibold p-3 sticky left-0 bg-slate-50">Student Name</th>
+                            {collections.map(pc => <th key={pc.id} className="text-left font-semibold p-3">{pc.title} (₹{pc.amount})</th>)}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {students.map((student) => (
+                            <tr key={student.id} className="border-t border-slate-200">
+                                <td className="p-3 font-medium sticky left-0 bg-white">{student.name}</td>
+                                {collections.map(pc => (
+                                    <td key={pc.id} className="p-3">
+                                        <select className="w-24 bg-slate-50 rounded-md p-1 text-sm border border-slate-200 focus:ring-2 focus:ring-sky-500 focus:outline-none">
+                                            <option value="paid" className="text-green-700">Paid</option>
+                                            <option value="not_paid" className="text-red-700">Not Paid</option>
+                                            <option value="partial" className="text-amber-700">Partial</option>
+                                        </select>
+                                    </td>
+                                ))}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+             <Modal show={showModal} onClose={() => setShowModal(false)} title="New Payment Column">
+                <div className="space-y-4">
+                    <input type="text" placeholder="Column Title (e.g., Industrial Visit)" className="w-full bg-slate-50 rounded-md p-3 text-sm text-slate-700 border border-slate-200 focus:ring-2 focus:ring-sky-500 focus:outline-none" />
+                    <input type="number" placeholder="Amount (₹)" className="w-full bg-slate-50 rounded-md p-3 text-sm text-slate-700 border border-slate-200 focus:ring-2 focus:ring-sky-500 focus:outline-none" />
+                    <div className="text-right">
+                        <button className="px-4 py-1.5 bg-slate-800 text-white rounded-md hover:bg-slate-900 font-semibold">Create Column</button>
+                    </div>
+                </div>
+            </Modal>
+        </div>
+    );
 };
-const StudentsPage = () => (<PageWrapper title="All Students"><div className="border border-slate-200 rounded-md"><table className="w-full"><thead className="bg-slate-50"><tr><th className="text-left font-semibold p-3">Name</th><th className="text-left font-semibold p-3">Course</th><th className="text-left font-semibold p-3">Group</th></tr></thead><tbody>{allStudentsData.map((student, index) => (<tr key={index} className="border-t border-slate-200"><td className="p-3 font-medium">{student.name}</td><td className="p-3">{student.course}</td><td className="p-3">{student.group}</td></tr>))}</tbody></table></div></PageWrapper>);
-const AdminQueriesPage = () => (<PageWrapper title="Student Queries"><div className="space-y-6">{adminQueriesData.map(q => (<div key={q.id} className="p-4 bg-slate-50 rounded-md border border-slate-200"><p className="font-semibold text-slate-600">{q.studentName}</p><p className="text-slate-800 my-2">Q: {q.query}</p>{q.reply ? (<p className="p-3 bg-green-50 border-l-4 border-green-300 rounded-r-md text-sm">A: {q.reply}</p>) : (<div className="space-y-2"><textarea className="w-full bg-white rounded-md p-2 text-sm text-slate-700 focus:ring-2 focus:ring-sky-500 focus:outline-none resize-none border border-slate-200" placeholder="Type your reply here..." rows={2}></textarea><div className="text-right"><button className="px-3 py-1 bg-sky-600 hover:bg-sky-700 text-white font-semibold rounded-md text-xs">Send Reply</button></div></div>)}</div>))}</div></PageWrapper>);
 
+const OfficeBearersPage = () => {
+    const [bearers, setBearers] = useState(initialOfficeBearers);
+    const [showModal, setShowModal] = useState(false);
 
-// ####################################################################
-// #  MAIN ROUTER                                                     #
-// ####################################################################
-export default function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<AdminPanel />} />
-        <Route path="/student" element={<StudentDashboard />} />
-      </Routes>
-    </BrowserRouter>
-  );
-}
+    return (
+        <div>
+            <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-semibold text-slate-800">Office Bearers</h3>
+                <button onClick={() => setShowModal(true)} className="flex items-center gap-2 px-3 py-1.5 bg-slate-800 text-white rounded-md hover:bg-slate-900 text-sm font-semibold">
+                    <PlusCircle size={16} /> New Bearer
+                </button>
+            </div>
+            <div className="bg-white p-6 rounded-lg border border-slate-200">
+                <div className="space-y-3">
+                    {bearers.map(bearer => (
+                        <div key={bearer.id} className="p-4 bg-slate-50 rounded-md border border-slate-200 flex justify-between items-center">
+                            <div>
+                                <p className="font-bold text-slate-800">{bearer.name}</p>
+                                <p className="text-slate-500">{bearer.position} - (Username: {bearer.username})</p>
+                            </div>
+                             <div className="flex items-center gap-2">
+                                <button className="p-2 text-slate-500 hover:text-slate-800"><Edit size={16} /></button>
+                                <button className="p-2 text-red-500 hover:text-red-700"><Trash2 size={16} /></button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+            <Modal show={showModal} onClose={() => setShowModal(false)} title="Create Office Bearer Account">
+                <div className="space-y-4">
+                    <input type="text" placeholder="Full Name" className="w-full bg-slate-50 rounded-md p-3 text-sm" />
+                    <input type="text" placeholder="Position" className="w-full bg-slate-50 rounded-md p-3 text-sm" />
+                    <input type="text" placeholder="Username" className="w-full bg-slate-50 rounded-md p-3 text-sm" />
+                    <input type="password" placeholder="Password" className="w-full bg-slate-50 rounded-md p-3 text-sm" />
+                    <div className="text-right">
+                        <button className="px-4 py-1.5 bg-slate-800 text-white rounded-md hover:bg-slate-900 font-semibold">Create Account</button>
+                    </div>
+                </div>
+            </Modal>
+        </div>
+    );
+};
+
+const EndorseContributionsPage = () => {
+    const [contributions, setContributions] = useState([
+        { id: 3, studentName: 'George K Saji', text: 'Volunteered during the Freshers Welcome Event.' },
+        { id: 4, studentName: 'Tejaa Tharshini', text: 'Designed the CSTAR logo.' },
+    ]);
+    const handleAction = (id) => setContributions(c => c.filter(item => item.id !== id));
+    return (
+        <div>
+            <h3 className="text-lg font-semibold text-slate-800 mb-4">Endorse Student Contributions</h3>
+            <div className="bg-white p-6 rounded-lg border border-slate-200">
+                <div className="space-y-4">
+                    {contributions.length > 0 ? contributions.map(item => (
+                        <div key={item.id} className="p-4 bg-slate-50 rounded-md border border-slate-200">
+                            <p className="font-semibold text-slate-600">{item.studentName}</p>
+                            <p className="text-slate-800 my-2">{item.text}</p>
+                            <div className="flex items-center space-x-2">
+                                <button onClick={() => handleAction(item.id)} className="flex items-center px-3 py-1 bg-green-100 text-green-700 hover:bg-green-200 text-xs font-semibold rounded-md"><ThumbsUp size={14} className="mr-1.5" /> Endorse</button>
+                                <button onClick={() => handleAction(item.id)} className="flex items-center px-3 py-1 bg-red-100 text-red-700 hover:bg-red-200 text-xs font-semibold rounded-md"><ThumbsDown size={14} className="mr-1.5" /> Reject</button>
+                            </div>
+                        </div>
+                    )) : <p className="text-slate-500">No pending contributions.</p>}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const AdminAnnouncementsPage = () => (
+     <div>
+        <h3 className="text-lg font-semibold text-slate-800 mb-4">Post an Announcement</h3>
+        <div className="bg-white p-6 rounded-lg border border-slate-200">
+            <div className="space-y-4">
+                <input type="text" placeholder="Announcement Title" className="w-full bg-slate-50 rounded-md p-3 text-sm text-slate-700 focus:ring-2 focus:ring-sky-500 focus:outline-none border border-slate-200" />
+                <textarea className="w-full bg-slate-50 rounded-md p-3 text-sm text-slate-700 focus:ring-2 focus:ring-sky-500 focus:outline-none resize-none border border-slate-200" placeholder="Write the announcement content here..." rows={5}></textarea>
+                <div className="text-right">
+                    <button className="px-4 py-1.5 bg-slate-800 hover:bg-slate-900 text-white font-semibold rounded-md transition-colors duration-200">Post Announcement</button>
+                </div>
+            </div>
+        </div>
+    </div>
+);
+
+const AdminQueriesPage = () => (
+    <div>
+        <h3 className="text-lg font-semibold text-slate-800 mb-4">Student Queries</h3>
+        <div className="bg-white p-6 rounded-lg border border-slate-200">
+            <div className="space-y-6">
+                {[
+                    { id: 1, studentName: 'Aadarsh V Venu', query: "When is the deadline for the next fee payment?", reply: "The deadline for the next semester's tuition fee is August 15, 2025.", status: 'Answered' },
+                    { id: 2, studentName: 'Arjun C', query: "Is there a holiday for the upcoming festival?", reply: null, status: 'Open' },
+                ].map(q => (
+                    <div key={q.id} className="p-4 bg-slate-50 rounded-md border border-slate-200">
+                        <p className="font-semibold text-slate-600">{q.studentName}</p>
+                        <p className="text-slate-800 my-2">Q: {q.query}</p>
+                        {q.reply ? (
+                            <p className="p-3 bg-green-50 border-l-4 border-green-300 rounded-r-md text-sm">A: {q.reply}</p>
+                        ) : (
+                            <div className="space-y-2">
+                                <textarea className="w-full bg-white rounded-md p-2 text-sm text-slate-700 focus:ring-2 focus:ring-sky-500 focus:outline-none resize-none border border-slate-200" placeholder="Type your reply here..." rows={2}></textarea>
+                                <div className="text-right">
+                                    <button className="px-3 py-1 bg-sky-600 hover:bg-sky-700 text-white font-semibold rounded-md text-xs">Send Reply</button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                ))}
+            </div>
+        </div>
+    </div>
+);
