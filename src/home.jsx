@@ -3,7 +3,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom'; // Import Routes and Route
 
 // Import your page components
-import LoginPage from './LoginPage.jsx'; // The new Login Page
+import LoginPage from './loginPage.jsx'; // The new Login Page
 import Student from './student.jsx';     // Your Student component
 import Admin from './admin.jsx';         // Your Admin component
 

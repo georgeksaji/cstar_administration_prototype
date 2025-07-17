@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { LogIn } from 'lucide-react'; // Icon for the login button
 
 // Assuming cstar.png is in src/assets/
+import rcssLogo from './assets/rcss.png';
 import cstarLogo from './assets/cstar.png';
 
 function LoginPage() {
@@ -42,10 +43,9 @@ function LoginPage() {
             <div className="bg-white rounded-lg p-8 w-full max-w-md shadow-xl border border-slate-200">
                 <div className="flex justify-center mb-6">
                     {/* Using the imported logo */}
-                    <img src={cstarLogo} alt="CSTAR Logo" className="h-16" />
+                    <img src={rcssLogo} alt="RCS Logo" className="h-22 mx-6" />
+                    <img src={cstarLogo} alt="CSTAR Logo" className="h-20 mx-6" />
                 </div>
-                <h2 className="text-2xl font-bold text-center text-slate-900 mb-6">Login to CSTAR Portal</h2>
-
                 <form onSubmit={handleLogin} className="space-y-5">
                     <div>
                         <label htmlFor="username" className="block text-slate-700 text-sm font-semibold mb-1">
@@ -91,7 +91,7 @@ function LoginPage() {
                 </form>
 
                 <p className="text-center text-slate-500 text-xs mt-6">
-                    Forgot your password? <a href="#" className="text-sky-600 hover:underline">Reset here</a>
+                    Forgot your password? <a href="reset_password" className="text-sky-600 hover:underline">Reset here</a>
                 </p>
             </div>
         </div>
