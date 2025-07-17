@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Home, Calendar, CreditCard, Megaphone, MessageSquare, LogOut, Menu, X, ChevronRight, CheckCircle, AlertTriangle, Clock, ArrowLeft, Users, Award, ExternalLink } from 'lucide-react';
+import { Home, Calendar, CreditCard, Megaphone, MessageSquare, LogOut, Menu, X, ChevronRight, CheckCircle, AlertTriangle, Clock, ArrowLeft, Users, Award, ExternalLink, ArrowLeftRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for routing
 // Assuming you have cstar.png in src/assets/
 import cstarLogo from './assets/cstar.png'; 
 
@@ -9,6 +10,7 @@ const studentData = {
     studentId: "MCA2426",
     attendance: 88,
     group: 5,
+    club: "Tech",
 };
 
 const eventData = {
@@ -60,11 +62,16 @@ const queriesData = [
     { id: 1, query: "When is the deadline for the next fee payment?", reply: "The deadline for the next semester's tuition fee is August 15, 2025. You can find more details under the Payments section." }
 ];
 
-// --- MAIN APP COMPONENT ---
-export default function App() {
+// --- MAIN STUDENT COMPONENT (exported by this file) ---
+function Student() { // Renamed from 'App' to 'Student'
     const [activeScreen, setActiveScreen] = useState('Home');
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [isSidebarOpen, setSidebarOpen] = useState(false);
+    const navigate = useNavigate(); // Initialize useNavigate here
+
+    const goToAdminDashboard = () => {
+        navigate('/admin'); // Redirect to the admin dashboard path
+    };
 
     const renderScreen = () => {
         switch (activeScreen) {
@@ -82,7 +89,13 @@ export default function App() {
 
     return (
         <div className="flex h-screen bg-slate-50 font-sans text-sm">
-            <Sidebar activeScreen={activeScreen} setActiveScreen={setActiveScreen} isSidebarOpen={isSidebarOpen} setSidebarOpen={setSidebarOpen} />
+            <Sidebar 
+                activeScreen={activeScreen} 
+                setActiveScreen={setActiveScreen} 
+                isSidebarOpen={isSidebarOpen} 
+                setSidebarOpen={setSidebarOpen}
+                goToAdminDashboard={goToAdminDashboard} // Pass the redirect function
+            />
             
             <div className="flex-1 flex flex-col overflow-hidden">
                 <Header studentName={studentData.name} onMenuClick={() => setSidebarOpen(true)} />
@@ -137,6 +150,11 @@ const Sidebar = ({ activeScreen, setActiveScreen, isSidebarOpen, setSidebarOpen 
                     </ul>
                 </nav>
                 <div className="px-4 py-4 border-t border-slate-200">
+                    {/* Go to Admin Dashboard  */}
+                    <button className="flex items-center px-4 py-2 rounded-md transition-colors duration-200 font-medium text-blue-600 hover:bg-blue-50">
+                        <ArrowLeftRight className="w-4 h-4 mr-3" />
+                        <span>Student Portal</span>
+                    </button>
                     <a href="#" className="flex items-center px-4 py-2 rounded-md transition-colors duration-200 font-medium text-red-600 hover:bg-red-50">
                         <LogOut className="w-4 h-4 mr-3" />
                         <span>Logout</span>
@@ -165,13 +183,14 @@ const PageWrapper = ({ title, children }) => (
 );
 
 // --- PAGE COMPONENTS ---
-
 const Dashboard = ({ setActiveScreen }) => (
   <PageWrapper title="Your Dashboard">
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
       <InfoCard label="Attendance" value={`${studentData.attendance}%`} onClick={() => setActiveScreen('Attendance')} action="View Details" />
       <InfoCard label="Student ID" value={studentData.studentId} />
       <InfoCard label="My Group" value={`Group ${studentData.group}`} onClick={() => setActiveScreen('My Group')} action="View Details" />
+        <InfoCard label="My Club" value={`${studentData.club} Club`} onClick={() => setActiveScreen('My Club')} action="View Details" />
+ 
     </div>
     <Section title="Upcoming Fests">
       <div className="space-y-4">
@@ -445,3 +464,5 @@ const EventReportDetail = ({ event, onBack }) => (
         <Section title="Attendance Summary"><p className="text-slate-600">{event.details.attendanceSummary}</p></Section>
     </PageWrapper>
 );
+
+export default Student;
