@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Header from './Header/header.jsx';
+import Logout from './Logout/logout.jsx';
 import { Home, Calendar, CreditCard, Megaphone, MessageSquare, LogOut, Menu, X, ChevronRight, CheckCircle, AlertTriangle, Clock, ArrowLeft, Users, Award, ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for routing
 // Assuming you have cstar.png in src/assets/
@@ -150,12 +151,7 @@ const Sidebar = ({ activeScreen, setActiveScreen, isSidebarOpen, setSidebarOpen 
                         ))}
                     </ul>
                 </nav>
-                <div className="px-4 py-4 border-t border-slate-200">
-                    <a href="#" className="flex items-center px-4 py-2 rounded-md transition-colors duration-200 font-medium text-red-600 hover:bg-red-50">
-                        <LogOut className="w-4 h-4 mr-3" />
-                        <span>Logout</span>
-                    </a>
-                </div>
+                <Logout />
             </aside>
         </>
     );
