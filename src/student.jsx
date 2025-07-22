@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Header from './Header/header.jsx';
 import { Home, Calendar, CreditCard, Megaphone, MessageSquare, LogOut, Menu, X, ChevronRight, CheckCircle, AlertTriangle, Clock, ArrowLeft, Users, Award, ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for routing
 // Assuming you have cstar.png in src/assets/
@@ -98,7 +99,7 @@ function Student() { // Renamed from 'App' to 'Student'
             />
             
             <div className="flex-1 flex flex-col overflow-hidden">
-                <Header studentName={studentData.name} onMenuClick={() => setSidebarOpen(true)} />
+                <StudentHeader studentName={studentData.name} onMenuClick={() => setSidebarOpen(true)} />
                 
                 <main className="flex-1 overflow-y-auto p-4 sm:p-6">
                     {renderScreen()}
@@ -160,14 +161,8 @@ const Sidebar = ({ activeScreen, setActiveScreen, isSidebarOpen, setSidebarOpen 
     );
 };
 
-const Header = ({ studentName, onMenuClick }) => (
-    <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 flex-shrink-0">
-        <div className="flex items-center space-x-4">
-            <button onClick={onMenuClick} className="p-2 rounded-full text-slate-500 hover:bg-slate-100 sm:hidden"><Menu size={20} /></button>
-            <h2 className="text-lg font-semibold text-slate-800">Welcome, {studentName.split(' ')[0]}!</h2>
-        </div>
-        <div className="w-8 h-8 rounded-md bg-slate-200 flex items-center justify-center text-slate-600 font-bold">{studentName.charAt(0)}</div>
-    </header>
+const StudentHeader = ({ studentName, onMenuClick }) => (
+    <Header Name={studentName} onMenuClick={onMenuClick} />
 );
 
 const PageWrapper = ({ title, children }) => (
@@ -184,7 +179,7 @@ const Dashboard = ({ setActiveScreen }) => (
       <InfoCard label="Attendance" value={`${studentData.attendance}%`} onClick={() => setActiveScreen('Attendance')} action="View Details" />
       <InfoCard label="Student ID" value={studentData.studentId} />
       <InfoCard label="My Group" value={`Group ${studentData.group}`} onClick={() => setActiveScreen('My Group')} action="View Details" />
-        <InfoCard label="My Club" value={`${studentData.club} Club`} onClick={() => setActiveScreen('My Club')} action="View Details" />
+    <InfoCard label="My Club" value={`${studentData.club} Club`} onClick={() => setActiveScreen('My Club')} action="View Details" />
  
     </div>
     <Section title="Upcoming Fests">

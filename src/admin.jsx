@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
+import Header from './Header/header.jsx';
 import { 
     CreditCard, Megaphone, MessageSquare, LogOut, Menu, X, 
     ChevronRight, Users, LayoutDashboard, CheckSquare as CheckSquareAdmin, 
     ThumbsUp, ThumbsDown, PlusCircle, Upload, Trash2, Edit, UserPlus, Calendar,
     BookCopy, Shield
 } from 'lucide-react';
-
 // --- FIXED ASSET ---
 // Using the imported cstarLogo from the assets folder.
 import cstarLogo from './assets/cstar.png'; 
@@ -145,14 +145,9 @@ const AdminSidebar = ({ activeScreen, setActiveScreen, isSidebarOpen, setSidebar
 };
 
 const AdminHeader = ({ adminName, onMenuClick }) => (
-    <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 flex-shrink-0">
-        <div className="flex items-center space-x-4">
-            <button onClick={onMenuClick} className="p-2 rounded-full text-slate-500 hover:bg-slate-100 sm:hidden"><Menu size={20} /></button>
-            <h2 className="text-lg font-semibold text-slate-800">Welcome, {adminName}</h2>
-        </div>
-        <div className="w-8 h-8 rounded-md bg-slate-200 flex items-center justify-center text-slate-600 font-bold">{adminName.charAt(0)}</div>
-    </header>
+    <Header Name={adminName} onMenuClick={onMenuClick} />
 );
+
 
 const AdminPageWrapper = ({ title, children }) => (
     <div className="w-full bg-white p-6 rounded-lg border border-slate-200">
