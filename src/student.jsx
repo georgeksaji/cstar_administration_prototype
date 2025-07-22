@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Home, Calendar, CreditCard, Megaphone, MessageSquare, LogOut, Menu, X, ChevronRight, CheckCircle, AlertTriangle, Clock, ArrowLeft, Users, Award, ExternalLink, ArrowLeftRight } from 'lucide-react';
+import { Home, Calendar, CreditCard, Megaphone, MessageSquare, LogOut, Menu, X, ChevronRight, CheckCircle, AlertTriangle, Clock, ArrowLeft, Users, Award, ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for routing
 // Assuming you have cstar.png in src/assets/
 import cstarLogo from './assets/cstar.png'; 
@@ -150,11 +150,6 @@ const Sidebar = ({ activeScreen, setActiveScreen, isSidebarOpen, setSidebarOpen 
                     </ul>
                 </nav>
                 <div className="px-4 py-4 border-t border-slate-200">
-                    {/* Go to Admin Dashboard  */}
-                    <button className="flex items-center px-4 py-2 rounded-md transition-colors duration-200 font-medium text-blue-600 hover:bg-blue-50">
-                        <ArrowLeftRight className="w-4 h-4 mr-3" />
-                        <span>Student Portal</span>
-                    </button>
                     <a href="#" className="flex items-center px-4 py-2 rounded-md transition-colors duration-200 font-medium text-red-600 hover:bg-red-50">
                         <LogOut className="w-4 h-4 mr-3" />
                         <span>Logout</span>

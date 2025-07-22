@@ -9,7 +9,6 @@ import Admin from './admin.jsx';         // Your Admin component
 
 function Home() { // This 'Home' component is now acting as your main 'App' component
   return (
-    // No <BrowserRouter> here, as it's already in main.jsx
     <Routes>
       {/* Set LoginPage as the default route for '/' */}
       <Route path="/" element={<LoginPage />} /> 
