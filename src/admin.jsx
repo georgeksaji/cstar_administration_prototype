@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Header from './Header/header.jsx';
-import Logout from './Logout/logout.jsx';
+import Header from './Components/Header/header.jsx';
+import Logout from './Components/Logout/logout.jsx';
 import { 
     CreditCard, Megaphone, MessageSquare, LogOut, Menu, X, 
     ChevronRight, Users, LayoutDashboard, CheckSquare as CheckSquareAdmin, 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Header from './Header/header.jsx';
-import Logout from './Logout/logout.jsx';
+import Header from './Components/Header/header.jsx';
+import Logout from './Components/Logout/logout.jsx';
 import { Home, Calendar, CreditCard, Megaphone, MessageSquare, LogOut, Menu, X, ChevronRight, CheckCircle, AlertTriangle, Clock, ArrowLeft, Users, Award, ExternalLink } from 'lucide-react';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for routing
 // Assuming you have cstar.png in src/assets/
